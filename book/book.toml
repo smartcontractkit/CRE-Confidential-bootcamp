@@ -1,0 +1,27 @@
+[book]
+title = "CRE Confidential Bootcamp: Build Confidential Workflows"
+language = "en"
+description = "A 2-day bootcamp on building Confidential Workflows with CRE (Chainlink Runtime Environment)"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+default-theme = "navy"
+smart-punctuation = true
+
+[output.html.playground]
+editable = false
+line-numbers = true
+
+[output.html.search]
+enable = true
+limit-results = 30
+teaser-word-count = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 1
+boost-paragraph = 1
+expand = true
+heading-split-level = 3

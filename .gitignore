@@ -1,0 +1,21 @@
+# Book output (mdBook [build] build-dir per project)
+book/book/
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CRE build artifacts
+*.wasm
+tmp.js
