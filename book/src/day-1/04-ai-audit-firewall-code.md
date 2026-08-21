@@ -101,6 +101,37 @@ const response = client
   .result();
 ```
 
+### What Is the Transaction Data Being Fetched?
+
+The first call the workflow makes (`GET /transaction-proposal`, via `collectTransactionProposal`) retrieves the key fields of a transaction that **has not been submitted onchain yet — it is a proposed transaction about to be sent/executed**. You can see this from the `TransactionProposal` type (lines 40–51 of `main.ts`):
+
+```typescript
+type TransactionProposal = {
+  chain_selector: number;
+  chain_name: string;
+  tx_hash: string;
+  from_address: string;
+  token_contract_address: string;
+  protocol_contract_address: string;
+  calldata: string;
+  value_wei: string;
+  signer: string;
+  requested_action: string;
+};
+```
+
+| Field | Meaning |
+|-------|---------|
+| `chain_selector` / `chain_name` | The target chain |
+| `tx_hash` | The proposal's transaction hash |
+| `from_address` / `signer` | The initiator and the signer |
+| `token_contract_address` | The token contract involved |
+| `protocol_contract_address` | The protocol contract to interact with |
+| `calldata` / `value_wei` | The call data and the amount of native token being transferred |
+| `requested_action` | The action being requested (e.g., `transfer`) |
+
+This is exactly the "pre-execution" nature of the firewall: the workflow screens the transaction **before it ever touches the chain**, and the two contract addresses above become the audit targets in the next stage.
+
 ### A Key Defense in Stage 2: Validate Credentials Before Trusting Data
 
 Before trusting the contract data returned by the scanner, the workflow validates the credential's own permission scopes — an easily overlooked but professional security detail:
@@ -167,6 +198,17 @@ export const determineVerdict = (primary, secondary): FirewallVerdict => {
   return "ALLOW";
 };
 ```
+
+Here's how the "better safe than sorry" mechanism plays out:
+
+| Trigger condition | Result | Why it's conservative |
+|-------------------|--------|----------------------|
+| Any risk flag from either model is `true` (`mergeFlags` is pure OR logic) | `DENY` | No consensus needed — one model flagging a problem is enough |
+| Either model recommends `review` | `MANUAL_REVIEW` | If one auditor isn't sure, there's no automatic pass |
+| Either model has `confidence < 0.7` | `MANUAL_REVIEW` | Even an "allow" conclusion doesn't count if the model isn't confident |
+| The two models' recommendations disagree | `MANUAL_REVIEW` | Disagreement between auditors = not trustworthy |
+
+Notice that `ALLOW` is the hardest verdict to reach: it requires **both** models to agree on "allow," **both** with confidence ≥ 0.7, and **zero** risk flags between them.
 
 The workflow then writes the full context to the audit log (`POST /audit-log`) and triggers the firewall action (`POST /firewall-action`) — both requests also carry confidential credentials and originate inside the enclave.
 

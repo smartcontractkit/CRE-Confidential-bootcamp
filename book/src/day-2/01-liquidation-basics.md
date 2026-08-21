@@ -90,7 +90,7 @@ The core idea is one sentence: **raise your HF before it gets close to 1**. Ther
 
 ### Manual vs. Automated
 
-The problem with manual defense: **liquidations often happen at 3 AM, within minutes**. When ETH crashes, going from HF 1.15 to liquidated can take just minutes — far too fast for a human to react.
+The problem with manual defense: **if liquidations happen at 3 AM, within minutes**. When price crashes, going from HF 1.15 to liquidated can take just minutes — far too fast for a human to react.
 
 So you need automation — a system that monitors risk signals 24/7 and executes defensive actions as danger approaches. That's exactly where CRE shines.
 
