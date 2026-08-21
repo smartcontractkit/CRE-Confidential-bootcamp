@@ -73,6 +73,12 @@ With `handlerInTee`, all of the above stays inside the enclave: credentials are 
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Visualize the Workflow
+
+![AI Audit Firewall workflow](../assets/CRE-AI_audit-firewall.png)
+
+Want to explore this workflow yourself? The complete workflow definition is available as a [JSON file](../assets/CRE-AI_Audit_Firewall.json). You can import it into [https://cre.solange.dev/](https://cre.solange.dev/) — a visual GUI tool for CRE workflows — to inspect and interact with the flow step by step.
+
 ## The Verdict Rules (Conservative Merge)
 
 `determineVerdict` follows a "better safe than sorry" strategy:

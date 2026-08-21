@@ -141,21 +141,7 @@ Workflow Simulation Result:
  "SAFE"
 ```
 
-### Experiment 2: Change Policy Secrets, Watch the Behavior Change
-
-Edit the policy values in `.env` (**no code changes needed!**), for example:
-
-```bash
-# Lower the per-execution cap to 2000 — add_collateral gets truncated to $2,000
-MOCK_LIQUIDATION_MAX_STABLECOIN_RESERVE_DEPLOYMENT=2000
-
-# Or switch to a "debt-first" sequencing preference
-MOCK_LIQUIDATION_DEFENSIVE_ACTION_SEQUENCING_PREFERENCE=debt-first
-```
-
-Re-run the simulation and observe how the returned action amounts and ordering change. This demonstrates the power of policy-as-secrets: **tune the strategy without touching the code, and the strategy stays invisible to outsiders**.
-
-### Experiment 3: Hit the Reserve Red Line
+### Experiment 2: Hit the Reserve Red Line
 
 ```bash
 # Raise the minimum reserve balance to 9000 — any deployment breaches the floor

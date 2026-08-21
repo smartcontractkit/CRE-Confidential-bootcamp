@@ -1,0 +1,464 @@
+{
+  "version": 1,
+  "workflow": {
+    "name": "AI Audit Firewall",
+    "description": "Verify transactions with LLMs before execute it",
+    "created": true
+  },
+  "nodes": [
+    {
+      "id": "trg_1787299537805_0",
+      "type": "appNode",
+      "position": {
+        "x": -4.071604559209163,
+        "y": -45.953290745571536
+      },
+      "data": {
+        "kind": "trigger.cron",
+        "name": "5-min Trigger",
+        "description": "Trigger workflow every 5 minutes",
+        "scheduleType": "interval",
+        "intervalValue": 5,
+        "intervalUnit": "minutes",
+        "atHour": 9,
+        "atMinute": 0,
+        "daysOfWeek": [
+          1
+        ],
+        "dayOfMonth": 1,
+        "timezone": "UTC",
+        "cronExpression": "*/5 * * * *"
+      },
+      "width": 240,
+      "height": 103,
+      "selected": true,
+      "positionAbsolute": {
+        "x": -4.071604559209163,
+        "y": -45.953290745571536
+      },
+      "dragging": false
+    },
+    {
+      "id": "web_1787299694271_1",
+      "type": "appNode",
+      "position": {
+        "x": 712.007302387675,
+        "y": 254.48375898889736
+      },
+      "data": {
+        "kind": "website",
+        "name": "Scanner server",
+        "description": "Website API reference",
+        "websiteName": "scanner server",
+        "apiUrls": [
+          "/transaction-proposal",
+          "/credentials/verify",
+          "contracts/{address}",
+          "/contracts/{address}"
+        ]
+      },
+      "width": 240,
+      "height": 189,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 712.007302387675,
+        "y": 254.48375898889736
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787299766120_5",
+      "type": "appNode",
+      "position": {
+        "x": 604.5530315687595,
+        "y": -160.40574127178553
+      },
+      "data": {
+        "kind": "cap.http.get",
+        "name": "scanner server",
+        "description": "",
+        "websiteName": "scanner server",
+        "apiUrl": "/credentials/verify"
+      },
+      "width": 240,
+      "height": 103,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 604.5530315687595,
+        "y": -160.40574127178553
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787300101874_20",
+      "type": "appNode",
+      "position": {
+        "x": 630.7596825598184,
+        "y": 10.99334713218579
+      },
+      "data": {
+        "kind": "cap.http.get",
+        "name": "scanner server",
+        "description": "",
+        "websiteName": "scanner server",
+        "apiUrl": "/contracts/{address}"
+      },
+      "width": 240,
+      "height": 103,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 630.7596825598184,
+        "y": 10.99334713218579
+      },
+      "dragging": false
+    },
+    {
+      "id": "web_1787300418373_23",
+      "type": "appNode",
+      "position": {
+        "x": 957.4712288045932,
+        "y": 148.75055510333067
+      },
+      "data": {
+        "kind": "website",
+        "name": "Primary LLM",
+        "description": "Website API reference",
+        "websiteName": "Primary LLM",
+        "apiUrls": [
+          "/audit-firewall/v1/analysis/primary"
+        ]
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 957.4712288045932,
+        "y": 148.75055510333067
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787300418373_24",
+      "type": "appNode",
+      "position": {
+        "x": 1003.1034536394166,
+        "y": -174.87449548770516
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "Primary LLM",
+        "description": "audit token contract",
+        "websiteName": "Primary LLM",
+        "apiUrl": "/audit-firewall/v1/analysis/primary",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1003.1034536394166,
+        "y": -174.87449548770516
+      },
+      "dragging": false
+    },
+    {
+      "id": "web_1787300610237_27",
+      "type": "appNode",
+      "position": {
+        "x": 1030.4230857240077,
+        "y": 305.68088929138236
+      },
+      "data": {
+        "kind": "website",
+        "name": "Secondary LLM",
+        "description": "Website API reference",
+        "websiteName": "Secondary LLM",
+        "apiUrls": [
+          "/audit-firewall/v1/analysis/primary"
+        ]
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1030.4230857240077,
+        "y": 305.68088929138236
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787300610237_28",
+      "type": "appNode",
+      "position": {
+        "x": 1005.9375016662975,
+        "y": -6.814350364330693
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "Secondary LLM",
+        "description": "Audit protocols and result from primary LLM",
+        "websiteName": "Secondary LLM",
+        "apiUrl": "/audit-firewall/v1/analysis/primary",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1005.9375016662975,
+        "y": -6.814350364330693
+      },
+      "dragging": false
+    },
+    {
+      "id": "web_1787300697123_31",
+      "type": "appNode",
+      "position": {
+        "x": 1296.5287576643236,
+        "y": 376.91167927744834
+      },
+      "data": {
+        "kind": "website",
+        "name": "Firewall server",
+        "description": "Website API reference",
+        "websiteName": "Firewall server",
+        "apiUrls": [
+          "/audit-firewall/transaction-proposal",
+          "/audit-firewall/audit-log",
+          "/audit-firewall/firewall-action"
+        ]
+      },
+      "width": 240,
+      "height": 167,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1296.5287576643236,
+        "y": 376.91167927744834
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787300697123_32",
+      "type": "appNode",
+      "position": {
+        "x": 306.1037947098715,
+        "y": -43.63611120575186
+      },
+      "data": {
+        "kind": "cap.http.get",
+        "name": "Firewall server",
+        "description": "",
+        "websiteName": "Firewall server",
+        "apiUrl": "/audit-firewall/transaction-proposal"
+      },
+      "width": 240,
+      "height": 103,
+      "selected": false,
+      "dragging": false,
+      "positionAbsolute": {
+        "x": 306.1037947098715,
+        "y": -43.63611120575186
+      }
+    },
+    {
+      "id": "cap_1787300889381_35",
+      "type": "appNode",
+      "position": {
+        "x": 1379.3942538394283,
+        "y": -181.55238204889886
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "Firewall server",
+        "description": "write result as log to firewall server",
+        "websiteName": "Firewall server",
+        "apiUrl": "/audit-firewall/audit-log",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1379.3942538394283,
+        "y": -181.55238204889886
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787300931444_38",
+      "type": "appNode",
+      "position": {
+        "x": 1386.6802262404383,
+        "y": 16.558252599847208
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "Firewall server",
+        "description": "execute the result",
+        "websiteName": "Firewall server",
+        "apiUrl": "/audit-firewall/firewall-action",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125,
+      "selected": false,
+      "positionAbsolute": {
+        "x": 1386.6802262404383,
+        "y": 16.558252599847208
+      },
+      "dragging": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_1787299766120_7",
+      "source": "cap_1787299766120_5",
+      "target": "web_1787299694271_1",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787300101875_21",
+      "source": "cap_1787299766120_5",
+      "target": "cap_1787300101874_20",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787300101875_22",
+      "source": "cap_1787300101874_20",
+      "target": "web_1787299694271_1",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787300418373_25",
+      "source": "cap_1787300101874_20",
+      "target": "cap_1787300418373_24",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787300418373_26",
+      "source": "cap_1787300418373_24",
+      "target": "web_1787300418373_23",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787300610237_29",
+      "source": "cap_1787300418373_24",
+      "target": "cap_1787300610237_28",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787300610237_30",
+      "source": "cap_1787300610237_28",
+      "target": "web_1787300610237_27",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787300697124_34",
+      "source": "cap_1787300697123_32",
+      "target": "web_1787300697123_31",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "source": "trg_1787299537805_0",
+      "sourceHandle": null,
+      "target": "cap_1787300697123_32",
+      "targetHandle": null,
+      "id": "reactflow__edge-trg_1787299537805_0-cap_1787300697123_32"
+    },
+    {
+      "source": "cap_1787300697123_32",
+      "sourceHandle": null,
+      "target": "cap_1787299766120_5",
+      "targetHandle": null,
+      "id": "reactflow__edge-cap_1787300697123_32-cap_1787299766120_5"
+    },
+    {
+      "id": "e_1787300889382_36",
+      "source": "cap_1787300610237_28",
+      "target": "cap_1787300889381_35",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787300889382_37",
+      "source": "cap_1787300889381_35",
+      "target": "web_1787300697123_31",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787300931444_39",
+      "source": "cap_1787300889381_35",
+      "target": "cap_1787300931444_38",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787300931444_40",
+      "source": "cap_1787300931444_38",
+      "target": "web_1787300697123_31",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    }
+  ],
+  "selectedId": "trg_1787299537805_0",
+  "idCounter": 41
+}

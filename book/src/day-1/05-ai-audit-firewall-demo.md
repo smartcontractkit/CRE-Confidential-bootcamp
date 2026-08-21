@@ -125,6 +125,8 @@ The workflow aborts early at Stage 2: no LLM calls at all — it logs the audit 
 
 `--broadcast` makes the simulator execute a real onchain write transaction, after which you can read `lastVerdict` onchain.
 
+> **Required configuration**: for local simulation on Sepolia, deploy the consumer contract with the **mock Forwarder contract** address `0x15fC6ae953E024d975e77382eEeC56A9101f9F88` as the constructor argument. Forwarder addresses for other networks are listed in the [Forwarder Directory](https://docs.chain.link/cre/guides/workflow/using-evm-client/forwarder-directory-go).
+
 ## Recap: What Just Happened
 
 ```

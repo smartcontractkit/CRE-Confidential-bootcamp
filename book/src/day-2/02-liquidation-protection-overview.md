@@ -77,6 +77,12 @@ This is the signature use case in the Confidential Workflows documentation, and 
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Visualize the Workflow
+
+![Automated Liquidation Protection workflow](../assets/CRE-Automated-Liquidation-Protection.png)
+
+Want to explore this workflow yourself? The complete workflow definition is available as a [JSON file](../assets/CRE-Automated_Liquidation_Protection.json). You can import it into [https://cre.solange.dev/](https://cre.solange.dev/) — a visual GUI tool for CRE workflows — to inspect and interact with the flow step by step.
+
 ## The Seven Defensive Actions
 
 Recapping the two broad approaches from the previous section, the workflow's full action set:
