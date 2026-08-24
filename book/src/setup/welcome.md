@@ -9,16 +9,25 @@ This is a two-day, hands-on bootcamp designed to give you a deep, developer-focu
 ### Frank Kong
 **Developer Relations Engineer, Chainlink Labs**
 
-<!-- TODO: Add the instructor photo at book/src/assets/instructor.png -->
 <img src="../assets/instructor.png" alt="Instructor photo" width="200">
 
 X (Twitter): [@frank_chainlink](https://x.com/frank_chainlink)
 
 LinkedIn: [Frank Kong](https://www.linkedin.com/in/frank-kong-0a927785/)
 
+<img src="../assets/instructor_sol.jpg" alt="Instructor photo" width="200">
+
+X (Twitter): [@solangegueiros](https://twitter.com/solangegueiros)
+
+LinkedIn: [Solange Gueiros](https://www.linkedin.com/in/solangegueiros/)
+
+<img src="../assets/instructor_darby.jpeg" alt="Instructor photo" width="200">
+
+LinkedIn: [Darby Martinez](https://www.linkedin.com/in/darby-martinez/)
+
 ## Schedule
 
-### 📅 Day 1: CRE + Confidential Workflow Fundamentals (2 hours)
+### 📅 Day 1: CRE + Confidential Workflow Fundamentals (1.5 hours)
 
 Build a core understanding of CRE and confidential computing, and run your first Confidential Workflow:
 
@@ -31,7 +40,7 @@ Build a core understanding of CRE and confidential computing, and run your first
 - Case Study 1 demo
 - ❓ Q&A - open questions
 
-### 📅 Day 2: Hands-On — Automated Liquidation Protection (2 hours)
+### 📅 Day 2: Hands-On — Automated Liquidation Protection (1.5 hours)
 
 No repeated fundamentals — we jump straight into the second complete case study:
 

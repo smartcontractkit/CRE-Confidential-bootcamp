@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "workflow": {
+    "name": "Automated Liquidation Protection",
+    "description": "Protect the position automatically",
+    "created": true
+  },
+  "nodes": [
+    {
+      "id": "trg_1787301508253_0",
+      "type": "appNode",
+      "position": {
+        "x": -282.2876389877922,
+        "y": -29.962797075641703
+      },
+      "data": {
+        "kind": "trigger.cron",
+        "name": "5-min Trigger",
+        "description": "Trigger the workflow every 5 minutes",
+        "scheduleType": "interval",
+        "intervalValue": 5,
+        "intervalUnit": "minutes",
+        "atHour": 9,
+        "atMinute": 0,
+        "daysOfWeek": [
+          1
+        ],
+        "dayOfMonth": 1,
+        "timezone": "UTC",
+        "cronExpression": "*/5 * * * *"
+      },
+      "width": 240,
+      "height": 103,
+      "selected": false,
+      "positionAbsolute": {
+        "x": -282.2876389877922,
+        "y": -29.962797075641703
+      },
+      "dragging": false
+    },
+    {
+      "id": "web_1787301702619_1",
+      "type": "appNode",
+      "position": {
+        "x": 8.69194712424462,
+        "y": 186.55920670119795
+      },
+      "data": {
+        "kind": "website",
+        "name": "Exchange",
+        "description": "Website API reference",
+        "websiteName": "Exchange",
+        "apiUrls": [
+          "/liquidation/risk-state",
+          "/liquidation/execute-defense"
+        ]
+      },
+      "width": 240,
+      "height": 146,
+      "selected": true,
+      "positionAbsolute": {
+        "x": 8.69194712424462,
+        "y": 186.55920670119795
+      },
+      "dragging": false
+    },
+    {
+      "id": "cap_1787301702619_2",
+      "type": "appNode",
+      "position": {
+        "x": 17.712361012207793,
+        "y": -29.962797075641703
+      },
+      "data": {
+        "kind": "cap.http.get",
+        "name": "Exchange",
+        "description": "",
+        "websiteName": "Exchange",
+        "apiUrl": "/liquidation/risk-state"
+      },
+      "width": 240,
+      "height": 103
+    },
+    {
+      "id": "web_1787301767022_5",
+      "type": "appNode",
+      "position": {
+        "x": 317.7123610122078,
+        "y": 120.0372029243583
+      },
+      "data": {
+        "kind": "website",
+        "name": "OpenAI",
+        "description": "Website API reference",
+        "websiteName": "OpenAI",
+        "apiUrls": [
+          "/liquidation/v1/responses"
+        ]
+      },
+      "width": 240,
+      "height": 125
+    },
+    {
+      "id": "cap_1787301767022_6",
+      "type": "appNode",
+      "position": {
+        "x": 317.7123610122078,
+        "y": -29.962797075641703
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "OpenAI",
+        "description": "Send risk, risk score and policy to the LLM",
+        "websiteName": "OpenAI",
+        "apiUrl": "/liquidation/v1/responses",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125
+    },
+    {
+      "id": "cap_1787301888568_9",
+      "type": "appNode",
+      "position": {
+        "x": 617.7123610122078,
+        "y": -29.962797075641703
+      },
+      "data": {
+        "kind": "cap.http.post",
+        "name": "Exchange",
+        "description": "submit enforce policy and return execution ID",
+        "websiteName": "Exchange",
+        "apiUrl": "/liquidation/execute-defense",
+        "cacheEnabled": false
+      },
+      "width": 240,
+      "height": 125
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_1787301702619_3",
+      "source": "trg_1787301508253_0",
+      "target": "cap_1787301702619_2",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787301702619_4",
+      "source": "cap_1787301702619_2",
+      "target": "web_1787301702619_1",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787301767022_7",
+      "source": "cap_1787301702619_2",
+      "target": "cap_1787301767022_6",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787301767022_8",
+      "source": "cap_1787301767022_6",
+      "target": "web_1787301767022_5",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    },
+    {
+      "id": "e_1787301888569_10",
+      "source": "cap_1787301767022_6",
+      "target": "cap_1787301888568_9",
+      "type": "smoothstep",
+      "data": {
+        "kind": "callback"
+      },
+      "className": "edge edge--callback"
+    },
+    {
+      "id": "e_1787301888569_11",
+      "source": "cap_1787301888568_9",
+      "target": "web_1787301702619_1",
+      "sourceHandle": "refSource",
+      "targetHandle": "refTarget",
+      "type": "straight",
+      "data": {
+        "kind": "ref"
+      },
+      "className": "edge edge--ref"
+    }
+  ],
+  "selectedId": "web_1787301702619_1",
+  "idCounter": 12
+}
