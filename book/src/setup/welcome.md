@@ -23,6 +23,8 @@ LinkedIn: [Solange Gueiros](https://www.linkedin.com/in/solangegueiros/)
 
 <img src="../assets/instructor_darby.jpeg" alt="Instructor photo" width="200">
 
+X (Twitter): [@darbease](https://x.com/darbease)
+
 LinkedIn: [Darby Martinez](https://www.linkedin.com/in/darby-martinez/)
 
 ## Schedule

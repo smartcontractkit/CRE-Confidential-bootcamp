@@ -13,10 +13,11 @@
 # 📅 Day 1: CRE + Confidential Workflow Fundamentals
 
 - [What Is CRE](day-1/01-what-is-cre.md)
-- [Confidential Workflows: Why Confidential Computing](day-1/02-confidential-workflows.md)
-- [Case Study 1: AI Audit Firewall Overview](day-1/03-ai-audit-firewall-overview.md)
-- [Case Study 1: Key Code Walkthrough](day-1/04-ai-audit-firewall-code.md)
-- [Case Study 1: Demo](day-1/05-ai-audit-firewall-demo.md)
+- [Hello World: Your First Workflow](day-1/02-hello-confidential-workflows.md)
+- [Confidential Workflows: Why Confidential Computing](day-1/03-confidential-workflows.md)
+- [Case Study 1: AI Audit Firewall Overview](day-1/04-ai-audit-firewall-overview.md)
+- [Case Study 1: Key Code Walkthrough](day-1/05-ai-audit-firewall-code.md)
+- [Case Study 1: Demo](day-1/06-ai-audit-firewall-demo.md)
 
 # 📅 Day 2: Hands-On — Automated Liquidation Protection
 
