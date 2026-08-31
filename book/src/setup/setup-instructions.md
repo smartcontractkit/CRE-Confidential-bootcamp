@@ -20,6 +20,7 @@ To get the most out of this bootcamp, we recommend preparing the following envir
 - **Bun v1.3 or later** - [Download here](https://bun.sh/docs/installation)
 - **CRE CLI** - [Installation guide](https://docs.chain.link/cre/getting-started/cli-installation)
 - **CRE account** - Sign up at [cre.chain.link](https://cre.chain.link) and complete `cre login` (see [CRE CLI Quick Setup](./cre-cli-setup.md))
+- **Deployment access** - Fill in [this form](https://docs.google.com/forms/d/e/1FAIpQLSdk8mxDZAXpEX1PHgjzCoBeKxSoQysoO9sxOb-gpBrDrjOhtA/viewform) with your own information to get deployment access
 - **Git** - [Download here](https://git-scm.com/downloads)
 
 ### Optional (only needed for the onchain write exercise)
