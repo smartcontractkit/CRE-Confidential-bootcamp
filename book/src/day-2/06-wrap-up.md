@@ -55,7 +55,7 @@ Does your workflow handle any of the following?
 - [Automated Portfolio Rebalancing](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/confidential-workflows/automated-portfolio-rebalancing) — the third confidential template in this series, great self-study material
 - [CRE Templates Hub](https://docs.chain.link/cre-templates) — all official templates
 
-### Deploying to Production
+## Deploying to Production
 
 Local simulation is fully open; deploying a Confidential Workflow to run on a DON requires:
 
@@ -71,4 +71,9 @@ Local simulation is fully open; deploying a Confidential Workflow to run on a DO
 - [Subscribe to the developer newsletter](https://pages.chain.link/subscribe)
 - [Follow Chainlink on X](https://x.com/chainlink)
 
-🎉 **Congratulations on completing the CRE Confidential Bootcamp!** We can't wait to see the confidential computing applications you build.
+
+## Congratulations!
+
+🎉 **Congratulations on completing the CRE Confidential Bootcamp!** 🎉
+
+We can't wait to see the confidential computing applications you build.

@@ -1,6 +1,7 @@
 # Liquidation and How to Prevent It
 
-> No more CRE or Confidential Workflow fundamentals today — we jump straight into the new case study. But because it involves quite a few DeFi finance concepts, let's spend 15 minutes getting them clear first.
+> No more CRE or Confidential Workflow fundamentals today — we jump straight into the new case study. 
+> But because it involves quite a few DeFi finance concepts, let's spend some minutes getting them clear first.
 
 ## Overcollateralized Lending: The Foundation of DeFi Borrowing
 
@@ -26,13 +27,18 @@ Why overcollateralization? Because the protocol has no identity information abou
 LTV = debt value / collateral value
 ```
 
-Example: deposit $10,000 of ETH, borrow $7,000 USDC → LTV = 70%.
+Example: 
+- deposit $10,000 of ETH
+- borrow $7,000 USDC
+- LTV = $7,000 / $10,000 = 70%.
 
 Each collateral asset has a **maximum LTV** (say, 75%) that determines how much you can borrow at most.
 
 ### 2. Liquidation Threshold
 
-The liquidation threshold is a line slightly above the max LTV (say, 78%). **When your LTV crosses the liquidation threshold, the position is deemed undercollateralized, and anyone can liquidate it.**
+The liquidation threshold is a line slightly above the max LTV (say, 78%). 
+
+**When your LTV crosses the liquidation threshold, the position is deemed undercollateralized, and anyone can liquidate it.**
 
 ### 3. Health Factor (HF) ⭐
 
@@ -50,9 +56,14 @@ Health Factor (HF) = ───────────────────�
 | **HF = 1** | The liquidation line! Can be liquidated on arrival |
 | **HF < 1** | Undercollateralized, can be liquidated |
 
-Example: $10,000 of ETH collateral (liquidation threshold 78%), $7,000 debt → HF = 10000 × 0.78 / 7000 ≈ **1.11**.
+Example: 
+- $10,000 of ETH collateral
+- Liquidation threshold: 78%
+- Loan $7,000 debt
+- HF = 10000 × 0.78 / 7000 ≈ **1.11**.
 
-> ⚠️ **HF moves with prices.** ETH price drops → collateral value shrinks → HF falls → danger when it approaches 1.0. This is what drives "liquidation cascades" during periods of high crypto market volatility.
+> ⚠️ **HF moves with prices.** ETH price drops → collateral value shrinks → HF falls → danger when it approaches 1.0.
+> This is what drives "liquidation cascades" during periods of high crypto market volatility.
 
 ## What Liquidation Costs You
 
@@ -69,7 +80,11 @@ For the borrower, liquidation means:
 
 ## How to Prevent Liquidation
 
-The core idea is one sentence: **raise your HF before it gets close to 1**. There are two broad approaches:
+The core idea is one sentence: 
+
+**raise your HF before it gets close to 1**. 
+
+There are two broad approaches:
 
 ### Approach 1: Increase collateral (grow the numerator)
 
@@ -100,9 +115,9 @@ Automated liquidation protection has a subtle game-theoretic problem:
 
 > **If your defense strategy is public, it can be exploited.**
 
-- If the market knows "this address adds collateral whenever HF drops below 1.25," attackers can manipulate prices against you, anticipate your moves, and **front-run** them
-- If your reserve size and deployable capital caps are public, an adversary can calculate exactly "how much capital it takes to push you past the liquidation line"
-- Your exchange credentials and strategy parameters (target HF, deployment caps, sequencing preferences) are all high-value intelligence
+- If the market knows "this address adds collateral whenever HF drops below 1.25," attackers can manipulate prices against you, anticipate your moves, and **front-run** them.
+- If your reserve size and deployable capital caps are public, an adversary can calculate exactly "how much capital it takes to push you past the liquidation line".
+- Your exchange credentials and strategy parameters (target HF, deployment caps, sequencing preferences) are all high-value intelligence.
 
 So a production-grade automated liquidation protection system needs:
 

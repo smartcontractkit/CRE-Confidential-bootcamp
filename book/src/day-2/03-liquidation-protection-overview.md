@@ -1,6 +1,8 @@
 # Case Study 2: Automated Liquidation Protection Overview
 
-> Template source: [`cre-templates/starter-templates/confidential-workflows/automated-liquidation-protection`](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/confidential-workflows/automated-liquidation-protection) (available in TypeScript and Go; the two implementations are behaviorally equivalent)
+> Template source: [`cre-templates/starter-templates/confidential-workflows/automated-liquidation-protection`](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/confidential-workflows/automated-liquidation-protection)
+
+The template is available in TypeScript and Go; the two implementations are behaviorally equivalent. In this bootcamp we are using TypeScript.
 
 ## The Use Case: Confidential Automated Defense Before Liquidation
 
@@ -139,12 +141,14 @@ Same pattern as Case Study 1: an Express mock server simulates the external depe
 
 The built-in default risk snapshot is a position **already in the danger zone**:
 
-```
-Collateral: ETH $45,000   Debt: $32,000 USDC
-Health factor: 1.14       Liquidation proximity: 12% (warning line: 18%)
-LTV: 71% / threshold 78%  Volatility: 0.37
-USDC reserve: $10,000     Cash: $12,500
-```
+- Collateral: ETH $45,000
+- Debt: $32,000 USDC
+- Health factor: 1.14
+- Liquidation proximity: 12% (warning line: 18%)
+- LTV: 71% / threshold 78%
+- Volatility: 0.37
+- USDC reserve: $10,000
+- Cash: $12,500
 
 → Liquidation proximity of 12% has already breached the 18% warning line, so the workflow should **spring into action**.
 

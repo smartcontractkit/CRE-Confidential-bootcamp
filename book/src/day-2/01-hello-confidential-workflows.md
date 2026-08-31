@@ -2,7 +2,11 @@
 
 > Template source: [`cre-templates/starter-templates/hello-confidential-workflows`](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/hello-confidential-workflows) (available in TypeScript and Go; the two implementations are behaviorally equivalent)
 
-Before we get into the theory of confidential computing, let's run the smallest possible Confidential Workflow end to end. It takes only 4 steps: clone the repo → configure the environment → simulate → (optionally) deploy.
+This is the smallest possible Confidential Workflow end to end, to be focused in the deploy part. It takes only 4 steps: 
+1. clone the repo
+2. configure the environment variables
+3. simulate
+4. deploy
 
 ## What This Workflow Does
 
@@ -23,24 +27,36 @@ Concretely, on every CRON tick the workflow:
 4. Scores the confidential response against `scoreThreshold` → verdict `APPROVE` / `REJECT`
 5. Crosses back to the DON with `usingTheDons()` and generates a signed report containing **only the verdict and score** — never the secret or the raw response body
 
-The default endpoint is `https://postman-echo.com/headers`, which echoes request headers back — no signup or real API key needed. The workflow uses it to confirm the secret really was injected inside the enclave, reported as the boolean `secret reached API: true` rather than by ever logging the token.
+The default endpoint is [`https://postman-echo.com/headers`](https://postman-echo.com/headers), which echoes request headers back — no signup or real API key needed. The workflow uses it to confirm the secret really was injected inside the enclave, reported as the boolean `secret reached API: true` rather than by ever logging the token.
 
-## Simulate the Workflow
+## Prepare the Workflow
 
 ### Step 1: Clone the Templates Repo
+
+We will use the TypeScript version.
 
 ```bash
 git clone https://github.com/smartcontractkit/cre-templates.git
 cd cre-templates/starter-templates/hello-confidential-workflows/hello-confidential-workflows-ts
 ```
 
-### Step 2: Set Up Environment Variables
+### Step 2: Install Dependencies
+
+```bash
+bun install --cwd ./my-workflow
+```
+
+### Step 3: Set Up Environment Variables
+
+Copy the example environment variables file to a new file named `.env`.
 
 ```bash
 cp .env.example .env
 ```
 
-Then set `SECRET_API_TOKEN` in `.env` — with the default echo endpoint, any non-empty value works. The `secrets.yaml` at the project root maps the workflow-facing secret ID to that environment variable:
+In this basic example, using the default echo endpoint, the `SECRET_API_TOKEN` in `.env` can be any non-empty value, it doesn't have to be a real API token.
+
+The `secrets.yaml` at the project root maps the workflow-facing secret ID to that environment variable:
 
 ```yaml
 secretsNames:
@@ -48,15 +64,11 @@ secretsNames:
         - SECRET_API_TOKEN
 ```
 
-> **Note**: In local simulation the CRE CLI injects secret values from `.env` according to this mapping. In a real deployment, the same secret ID (`API_TOKEN`) is resolved from the Vault DON instead — your workflow code doesn't change. That's why deployment requires an extra step (see below).
+> **Note**: In local simulation the CRE CLI injects secret values from `.env` according to this mapping. 
+> In a real deployment, the same secret ID (`API_TOKEN`) is resolved from the Vault DON instead — your workflow code doesn't change. 
+> Deployment requires an extra step, which will also be covered later.
 
-### Step 3: Install Dependencies
-
-```bash
-cd my-workflow && bun install && cd ..
-```
-
-### Step 4: Simulate
+## Simulate the Workflow
 
 From the project root, start the simulation with the CRE CLI:
 
@@ -87,21 +99,37 @@ You'll see output similar to:
 
 - The simulator confirms the TEE constraint it resolved (**AWS Nitro in us-west-2**) and warns that **it is not a real enclave** — logs are shown for debugging only; in real execution they never leave the TEE.
 - `secret reached API: true` means the Vault DON secret was fetched inside the enclave and arrived in the outbound request's `Authorization` header.
-- The verdict can flip between `APPROVE` and `REJECT` from run to run — the score derives from the live response body, and the echo endpoint includes a per-request trace ID. Lower `scoreThreshold` in `config.staging.json` to see `APPROVE` consistently.
+- The verdict can flip between `APPROVE` and `REJECT` from run to run — the score derives from the live response body, and the echo endpoint includes a per-request trace ID. 
+- Lower `scoreThreshold` in [`my-workflow/config.staging.json`]() to see `APPROVE` consistently.
 
 ## Deploy the Workflow
 
-Deployment takes 3 steps: add the secret to the Vault DON → deploy → verify. We'll use the **private registry** (authorized by your CRE login session — no wallet, no gas).
+Deployment takes 3 steps: 
+1. add the secret to the Vault DON
+2. deploy
+3. verify. 
+
+### Private Registry
+
+We'll use the **private registry** (authorized by your CRE login session — no wallet, no gas).
+
+The [private registry](https://docs.chain.link/cre/guides/operations/deploying-to-private-registry-ts) is a Chainlink-hosted, offchain workflow registry.
+
+All lifecycle operations (deploy, activate, pause, delete, update) are authorized by your CRE login session.
+You do not need to settup a wallet and there are no Ethereum Mainnet transactions and no gas fees for registry management.
 
 ### Step 1: Add the Secret to the Vault DON (Before Deploying!)
 
-A deployed workflow **cannot read your local `.env` file** — it fetches secrets from the Vault DON at runtime. So before deploying, you must store `API_TOKEN` in the Vault DON. Make sure `SECRET_API_TOKEN` is set in your `.env`, then run:
+A deployed workflow **cannot read your local `.env` file** — it fetches secrets from the Vault DON at runtime. 
+
+Before deploying, you must store `API_TOKEN` in the Vault DON. Execute the secret creation:
 
 ```bash
 cre secrets create secrets.yaml --target staging-settings --secrets-auth=browser
 ```
+> **Alert** Make sure `SECRET_API_TOKEN` is set in your `.env` before executing the command above!
 
-The CLI reads `secrets.yaml`, picks up the value from `SECRET_API_TOKEN` in `.env`, opens a browser window to authorize against the Vault DON with your CRE login session, and stores the secret. You'll see:
+The CLI reads `secrets.yaml`, picks up the value from `SECRET_API_TOKEN` in `.env`, opens a browser window to authorize against the Vault DON with your CRE login session, and stores the secret. When it's over, you'll see:
 
 ```bash
 Secret created: secret_id=API_TOKEN, owner=<your-organization-owner>, namespace=main
@@ -117,7 +145,11 @@ cre secrets list --target staging-settings --secrets-auth=browser
 
 ### Step 2: Deploy
 
-Add `deployment-registry: "private"` under `user-workflow` in `my-workflow/workflow.yaml`:
+Verify if the configuration file `workflow.yaml` is already prepared for deployment.
+
+Go to `staging-settings`, `user-workflow`.
+
+Add or update `deployment-registry: "private"`:
 
 ```yaml
 staging-settings:
@@ -126,7 +158,7 @@ staging-settings:
     deployment-registry: "private"
 ```
 
-Then deploy from the project root:
+Then **deploy** from the project root:
 
 ```bash
 cre workflow deploy my-workflow --target staging-settings
@@ -151,8 +183,17 @@ Details:
 
 ### Step 3: Verify and Manage
 
+Confirm it's registered and active:
+
 ```bash
-cre workflow list --registry private        # confirm it's registered and Active
+cre workflow list --registry private
+```
+
+You can also check it out on [CRE workflows](https://app.chain.link/cre/workflows)
+
+Manage your workflow:
+
+```bash
 cre workflow pause my-workflow --target staging-settings     # pause
 cre workflow activate my-workflow --target staging-settings  # resume
 cre workflow delete my-workflow --target staging-settings    # permanently remove
@@ -161,6 +202,14 @@ cre workflow delete my-workflow --target staging-settings    # permanently remov
 The workflow now runs on its CRON schedule: every execution happens inside a real enclave, fetches `API_TOKEN` from the Vault DON, and produces a DON-signed report.
 
 > ⚠️ **Production reminder**: the template logs `Enclave computation complete. verdict=...` inside the enclave for debugging. Remove every `runtime.log()` inside the TEE handler before any real deployment — anything logged from within a Confidential Workflow could leak the data the enclave is meant to protect.
+
+### Clean up 
+
+This workflow is intended solely to cover the deployment process, so it is best practice to remove it after learning the process:
+
+```bash
+cre workflow delete my-workflow --target staging-settings
+```
 
 ## Key Takeaways
 
@@ -174,4 +223,4 @@ The workflow now runs on its CRON schedule: every execution happens inside a rea
 
 ## What's Next
 
-You've just run a Confidential Workflow — but why does it need an enclave, and what exactly stays confidential? Let's build that mental model properly: **Confidential Workflows: Why Confidential Computing**.
+You've just learned how to deploy a Confidential Workflow — now let´s go to the second use case: **Automated Liquidation Protection**.

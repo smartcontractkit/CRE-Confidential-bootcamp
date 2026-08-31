@@ -67,6 +67,8 @@ cre whoami
 
 If the `cre` command is not found after installation:
 
+#### macOS/Linux
+
 ```bash
 # Add to your shell config file (~/.bashrc, ~/.zshrc, etc.)
 export PATH="$HOME/.cre/bin:$PATH"
@@ -74,6 +76,10 @@ export PATH="$HOME/.cre/bin:$PATH"
 # Reload your shell
 source ~/.zshrc  # or ~/.bashrc
 ```
+
+#### Windows
+
+[Add the CLI to your PATH](https://docs.chain.link/cre/getting-started/cli-installation/windows#3-add-the-cli-to-your-path)
 
 ## What Can You Do Now?
 

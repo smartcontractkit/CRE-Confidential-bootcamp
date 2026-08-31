@@ -1,6 +1,8 @@
 # Case Study 1: AI Audit Firewall Overview
 
-> Template source: [`cre-templates/starter-templates/confidential-workflows/ai-audit-firewall`](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/confidential-workflows/ai-audit-firewall) (available in TypeScript and Go; the two implementations are behaviorally equivalent)
+> Template source: [`cre-templates/starter-templates/confidential-workflows/ai-audit-firewall`](https://github.com/smartcontractkit/cre-templates/tree/main/starter-templates/confidential-workflows/ai-audit-firewall)
+
+The template is available in TypeScript and Go; the two implementations are behaviorally equivalent. In this bootcamp we are using TypeScript.
 
 ## The Use Case: A Confidential Pre-Execution Security Firewall
 

@@ -40,6 +40,22 @@ This is the case study's core design decision — **keep every policy parameter 
 export const onCronTrigger = async (runtime: TeeRuntime<Config>): Promise<string> => {
   const { mock_base_url, openai_url, openai_model, secrets_ids } = runtime.config;
 
+  const secrets = runtime
+    .getSecrets([
+      { id: secrets_ids.exchange_api_key_id },
+      { id: secrets_ids.openai_api_key_id },
+      { id: secrets_ids.liquidation_warning_action_threshold_secret_id },
+      { id: secrets_ids.minimum_health_factor_secret_id },
+      { id: secrets_ids.target_health_factor_secret_id },
+      { id: secrets_ids.maximum_stablecoin_reserve_deployment_secret_id },
+      { id: secrets_ids.minimum_stablecoin_reserve_balance_secret_id },
+      { id: secrets_ids.maximum_collateral_allocation_secret_id },
+      { id: secrets_ids.maximum_partial_debt_repayment_secret_id },
+      { id: secrets_ids.defensive_action_sequencing_preference_secret_id },
+      { id: secrets_ids.preferred_venues_secret_id },
+    ])
+    .result();
+
   // ① Two traditional credentials
   const exchangeApiKey = runtime.getSecret({ id: secrets_ids.exchange_api_key_id }).result().value;
   const openAiApiKey = runtime.getSecret({ id: secrets_ids.openai_api_key_id }).result().value;
@@ -54,6 +70,26 @@ export const onCronTrigger = async (runtime: TeeRuntime<Config>): Promise<string
     secrets_ids.minimum_health_factor_secret_id,
   );
   // ... target_health_factor, max/min reserve, collateral allocation cap, partial repayment cap ...
+  const targetHealthFactor = parseRequiredSecretNumber(
+    secrets[secrets_ids.target_health_factor_secret_id].value,
+    secrets_ids.target_health_factor_secret_id,
+  );
+  const maxStablecoinReserveDeployment = parseRequiredSecretNumber(
+    secrets[secrets_ids.maximum_stablecoin_reserve_deployment_secret_id].value,
+    secrets_ids.maximum_stablecoin_reserve_deployment_secret_id,
+  );
+  const minStablecoinReserveBalance = parseRequiredSecretNumber(
+    secrets[secrets_ids.minimum_stablecoin_reserve_balance_secret_id].value,
+    secrets_ids.minimum_stablecoin_reserve_balance_secret_id,
+  );
+  const maxCollateralAllocation = parseRequiredSecretNumber(
+    secrets[secrets_ids.maximum_collateral_allocation_secret_id].value,
+    secrets_ids.maximum_collateral_allocation_secret_id,
+  );
+  const maxPartialDebtRepayment = parseRequiredSecretNumber(
+    secrets[secrets_ids.maximum_partial_debt_repayment_secret_id].value,
+    secrets_ids.maximum_partial_debt_repayment_secret_id,
+  );
 
   // ③ Enum- and list-typed policies have dedicated parsers
   const defensiveSequencePreference = parseExecutionSequencePreference(
@@ -62,6 +98,8 @@ export const onCronTrigger = async (runtime: TeeRuntime<Config>): Promise<string
   const preferredVenues = parseVenueListSecret(
     runtime.getSecret({ id: secrets_ids.preferred_venues_secret_id }).result().value,
   );  // ["binance", "onchain", "coinbase"]
+
+  runtime.log("liquidation-getsecrets-ok");
 ```
 
 Why do it this way?
