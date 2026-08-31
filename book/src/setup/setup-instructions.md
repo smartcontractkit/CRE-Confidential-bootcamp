@@ -1,3 +1,5 @@
+A hands-on bootcamp for building confidential computing workflows with [**Chainlink Runtime Environment (CRE)**](https://docs.chain.link/cre).
+
 # 🖥️ Environment Setup
 
 Please complete the following steps **before** the bootcamp to ensure a smooth learning experience.

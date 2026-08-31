@@ -139,4 +139,4 @@ For most applications that's fine. But if your workflow handles:
 
 ## What's Next
 
-Now that you understand the fundamentals of CRE, let's get hands-on right away: simulate and deploy your first Confidential Workflow — **Hello World** — and then we'll dive into how CRE achieves confidential computing through TEEs.
+Now that you understand the fundamentals of CRE, let's discover why **Confidential Computing** and then we'll dive into how CRE achieves confidential computing through TEEs.
