@@ -4,28 +4,13 @@ Welcome to the **CRE Confidential Bootcamp: Build Confidential Workflows**!
 
 This is a two-day, hands-on bootcamp designed to give you a deep, developer-focused guide to building confidential computing workflows with the Chainlink Runtime Environment (CRE).
 
-## 🎤 Instructor
+## 🎤 Instructors
 
-### Frank Kong
-**Developer Relations Engineer, Chainlink Labs**
-
-<img src="../assets/instructor.png" alt="Instructor photo" width="200">
-
-X (Twitter): [@frank_chainlink](https://x.com/frank_chainlink)
-
-LinkedIn: [Frank Kong](https://www.linkedin.com/in/frank-kong-0a927785/)
-
-<img src="../assets/instructor_sol.jpg" alt="Instructor photo" width="200">
-
-X (Twitter): [@solangegueiros](https://twitter.com/solangegueiros)
-
-LinkedIn: [Solange Gueiros](https://www.linkedin.com/in/solangegueiros/)
-
-<img src="../assets/instructor_darby.jpeg" alt="Instructor photo" width="200">
-
-X (Twitter): [@darbease](https://x.com/darbease)
-
-LinkedIn: [Darby Martinez](https://www.linkedin.com/in/darby-martinez/)
+|  |  |
+|-------|------------|
+| <img src="../assets/instructor.png" alt="Frank Kong" width="180"> | **Frank Kong**<br>Developer Relations Engineer, Chainlink Labs<br><br>X (Twitter): [@frank_chainlink](https://x.com/frank_chainlink)<br>LinkedIn: [Frank Kong](https://www.linkedin.com/in/frank-kong-0a927785/) |
+| <img src="../assets/instructor_darby.jpeg" alt="Darby Martinez" width="180"> | **Darby Martinez**<br>Developer Relations Engineer, Chainlink Labs<br><br>X (Twitter): [@darbease](https://x.com/darbease)<br>LinkedIn: [Darby Martinez](https://www.linkedin.com/in/darby-martinez/) |
+| <img src="../assets/instructor_sol.jpg" alt="Solange Gueiros" width="180"> | **Solange Gueiros**<br>Developer Relations Manager (Education & Content), <br>Chainlink Labs<br><br>X (Twitter): [@solangegueiros](https://twitter.com/solangegueiros)<br>LinkedIn: [Solange Gueiros](https://www.linkedin.com/in/solangegueiros/)<br>[solange.dev](https://solange.dev/) |
 
 ## Schedule
 
@@ -44,8 +29,9 @@ Build a core understanding of CRE and confidential computing, and run your first
 
 ### 📅 Day 2: Hands-On — Automated Liquidation Protection (1.5 hours)
 
-No repeated fundamentals — we jump straight into the second complete case study:
+No repeated fundamentals — we jump straight into deploy instructions and the second complete case study:
 
+- Workflows in production: how to deploy a Hello World workflow
 - Finance primer: what liquidation is and how to prevent it
 - Case Study 2: Automated Liquidation Protection
   - Workflow flow and key code walkthrough
