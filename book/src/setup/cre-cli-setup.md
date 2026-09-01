@@ -90,4 +90,4 @@ With CRE set up, you can:
 - **Simulate workflows**: Test workflows locally with `cre workflow simulate` — both case studies in this bootcamp run this way
 - **Deploy workflows**: Deploy to production when ready (Early Access)
 
-> **Note**: Deploying Confidential Workflows is currently in Private Beta and requires separate enrollment (see the [Day 2 wrap-up](../day-2/05-wrap-up.md)). However, **local simulation requires no special access** — which is exactly how we run everything in this bootcamp.
+> **Note**: Deploying Confidential Workflows is currently in Private Beta and requires separate enrollment (see the [Day 2 wrap-up](../day-2/06-wrap-up.md)). However, **local simulation requires no special access** — which is exactly how we run everything in this bootcamp.

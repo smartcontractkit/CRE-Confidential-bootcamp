@@ -13,16 +13,16 @@
 # 📅 Day 1: CRE + Confidential Workflow Fundamentals
 
 - [What Is CRE](day-1/01-what-is-cre.md)
-- [Hello World: Your First Workflow](day-1/02-hello-confidential-workflows.md)
-- [Confidential Workflows: Why Confidential Computing](day-1/03-confidential-workflows.md)
-- [Case Study 1: AI Audit Firewall Overview](day-1/04-ai-audit-firewall-overview.md)
-- [Case Study 1: Key Code Walkthrough](day-1/05-ai-audit-firewall-code.md)
-- [Case Study 1: Demo](day-1/06-ai-audit-firewall-demo.md)
+- [Confidential Workflows: Why Confidential Computing](day-1/02-confidential-workflows.md)
+- [Case Study 1: AI Audit Firewall Overview](day-1/03-ai-audit-firewall-overview.md)
+- [Case Study 1: Key Code Walkthrough](day-1/04-ai-audit-firewall-code.md)
+- [Case Study 1: Demo](day-1/05-ai-audit-firewall-demo.md)
 
 # 📅 Day 2: Hands-On — Automated Liquidation Protection
 
-- [Liquidation and How to Prevent It](day-2/01-liquidation-basics.md)
-- [Case Study 2: Automated Liquidation Protection Overview](day-2/02-liquidation-protection-overview.md)
-- [Case Study 2: Key Code Walkthrough](day-2/03-liquidation-protection-code.md)
-- [Case Study 2: Demo](day-2/04-liquidation-protection-demo.md)
-- [Wrap-Up: End-to-End Recap and Next Steps](day-2/05-wrap-up.md)
+- [Hello World: Your First Workflow](day-2/01-hello-confidential-workflows.md)
+- [Liquidation and How to Prevent It](day-2/02-liquidation-basics.md)
+- [Case Study 2: Automated Liquidation Protection Overview](day-2/03-liquidation-protection-overview.md)
+- [Case Study 2: Key Code Walkthrough](day-2/04-liquidation-protection-code.md)
+- [Case Study 2: Demo](day-2/05-liquidation-protection-demo.md)
+- [Wrap-Up: End-to-End Recap and Next Steps](day-2/06-wrap-up.md)
