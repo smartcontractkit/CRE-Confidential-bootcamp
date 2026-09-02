@@ -25,9 +25,9 @@ This is the signature use case in the Confidential Workflows documentation, and 
 | 🔑 LLM API credentials | Keys with spending limits get stolen |
 | 🎯 **Risk thresholds** (warning line, min/target health factor) | Predicted → front-run, deliberately pushed toward the liquidation line |
 | 💰 **Capital parameters** (reserve deployment cap, minimum reserve balance, collateral allocation cap) | Adversaries calculate the exact boundary of your defensive capacity |
-| 🔀 **Execution preferences** (collateral-first vs. debt-first, preferred venues) | Your defensive moves get traded against in advance |
+| 🔀 **Preferred venues** | Your defensive moves get traded against in advance |
 
-> Notice an interesting design choice: **the policy parameters are themselves secrets**. This workflow has 11 secrets, 9 of which are not "credentials" in the traditional sense but thresholds and strategy — all released by the Vault DON into the enclave. Node operators have no way to learn "when you act, or how much you can deploy."
+> Notice an interesting design choice: **the policy parameters are themselves secrets**. This workflow has 10 secrets, 8 of which are not "credentials" in the traditional sense but thresholds and strategy — all released by the Vault DON into the enclave. Node operators have no way to learn "how much you can deploy." (The one exception is the collateral-first / debt-first / balanced sequencing choice — that's read from public workflow config, not the Vault DON, so only *which venues* you act through stays confidential, not the order you act in.)
 
 ## Workflow Flow
 
@@ -39,9 +39,9 @@ This is the signature use case in the Confidential Workflows documentation, and 
                                            │
                                            ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│ Stage 0: Fetch 11 secrets inside the enclave                           │
-│ Exchange credential + LLM credential + 9 policy parameters             │
-│ (thresholds / caps / preferences)                                      │
+│ Stage 0: Fetch 10 secrets inside the enclave (1 getSecrets call)       │
+│ Exchange credential + LLM credential + 8 policy-parameter secrets      │
+│ (thresholds / caps / preferred venues; sequencing is public config)    │
 └──────────────────────────────────────┬─────────────────────────────────┘
                                        │
                                        ▼
@@ -104,7 +104,7 @@ Recapping the two broad approaches from the previous section, the workflow's ful
 ```
 automated-liquidation-protection/         ← CRE project root
 ├── project.yaml                          ← Project-level config (RPC endpoints)
-├── secrets.yaml                          ← 11 secret ID → env var mappings
+├── secrets.yaml                          ← 10 secret ID → env var mappings
 ├── .env.example                          ← Env var template (with all policy defaults)
 └── automated-liquidation-protection-ts/  ← TypeScript workflow
     ├── main.ts                           ← The workflow code ⭐
@@ -113,7 +113,7 @@ automated-liquidation-protection/         ← CRE project root
     └── mock-server.js                    ← Local deterministic mock API server
 ```
 
-### The Eleven Secrets
+### The Ten Secrets
 
 | Secret ID | Type | Purpose |
 |-----------|------|---------|
@@ -126,8 +126,9 @@ automated-liquidation-protection/         ← CRE project root
 | `liquidation_minimum_stablecoin_reserve_balance` | Policy | Minimum reserve balance, $ (default 2000) |
 | `liquidation_maximum_collateral_allocation` | Policy | Collateral allocation cap, % (default 80) |
 | `liquidation_maximum_partial_debt_repayment` | Policy | Partial repayment cap, % (default 40) |
-| `liquidation_defensive_action_sequencing_preference` | Policy | Sequencing preference (default collateral-first) |
 | `liquidation_preferred_venues` | Policy | Preferred venue list (default binance,onchain,coinbase) |
+
+> The sequencing preference (default `collateral-first`) is **not** in this table — it's supplied via public workflow config, not the Vault DON.
 
 ## The Mock Server
 
@@ -154,4 +155,4 @@ The built-in default risk snapshot is a position **already in the danger zone**:
 
 ## What's Next
 
-Let's open `main.ts` and see how all the policy parameters are injected as secrets, and how deterministic constraints "backstop" the LLM's decisions.
+Let's open `main.ts` and see how most of the policy parameters are injected as secrets (one — the sequencing preference — comes from public config instead), and how deterministic constraints "backstop" the LLM's decisions.
