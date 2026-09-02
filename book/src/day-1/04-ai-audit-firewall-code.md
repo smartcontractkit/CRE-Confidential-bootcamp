@@ -36,7 +36,7 @@ export const initWorkflow = (config: Config): Workflow<Config> => {
 Key points:
 
 - **`handlerInTee(trigger, callback, teeRequirements, options)`**: declares that this handler's callback must execute inside a TEE, and specifies the acceptable TEE types (`nitro`) and regions.
-- The callback signature changes from `Runtime<Config>` to **`TeeRuntime<Config>`** — which exposes in-enclave capabilities (such as the enclave release path of `getSecret`, and confidential HTTP calls) plus the interface for crossing back to the DON.
+- The callback signature changes from `Runtime<Config>` to **`TeeRuntime<Config>`** — which exposes in-enclave capabilities (such as the enclave release path of `getSecrets`, and confidential HTTP calls) plus the interface for crossing back to the DON.
 - As with a regular workflow, the Workflow DON still listens for the CRON trigger; when it fires, the DON hands execution to the enclave.
 
 ## 2. Fetching Secrets Inside the Enclave (the Vault DON)
@@ -48,19 +48,28 @@ export const runAuditFirewall = async (
 ): Promise<string> => {
   const { mock_base_url, scanner_url, primary_llm_url, secondary_llm_url, secrets_ids } = runtime.config;
 
-  // Secrets are released by the Vault DON directly into the attested enclave
-  // at the moment your code needs them
-  const scannerApiKey = runtime.getSecret({ id: secrets_ids.scanner_api_key_id }).result().value;
-  const primaryLlmApiKey = runtime.getSecret({ id: secrets_ids.primary_llm_api_key_id }).result().value;
-  const secondaryLlmApiKey = runtime.getSecret({ id: secrets_ids.secondary_llm_api_key_id }).result().value;
+  // ① One batched call fetches all 3 secrets at once — released by the Vault
+  //    DON directly into the attested enclave at the moment your code needs them
+  const secrets = runtime
+    .getSecrets([
+      { id: secrets_ids.scanner_api_key_id },
+      { id: secrets_ids.primary_llm_api_key_id },
+      { id: secrets_ids.secondary_llm_api_key_id },
+    ])
+    .result();
 
-  runtime.log("audit-firewall-getsecret-ok");
+  // ② Look each value up by its secret ID from the batched result
+  const scannerApiKey = secrets[secrets_ids.scanner_api_key_id].value;
+  const primaryLlmApiKey = secrets[secrets_ids.primary_llm_api_key_id].value;
+  const secondaryLlmApiKey = secrets[secrets_ids.secondary_llm_api_key_id].value;
+
+  runtime.log("audit-firewall-getsecrets-ok");
   // ...
 ```
 
 Key points:
 
-- The `runtime.getSecret({ id })` call happens **inside the enclave**, and the plaintext secret **never passes through Workflow DON nodes** — the Vault DON releases it directly into the enclave after verifying the enclave's attestation.
+- The `runtime.getSecrets([...])` call happens **inside the enclave**, and the plaintext secrets **never pass through Workflow DON nodes** — the Vault DON releases them directly into the enclave after verifying the enclave's attestation. Batching all 3 secrets into one call is more efficient than issuing 3 separate `getSecret` calls.
 - Secret IDs are not hardcoded; they're injected via the `secrets_ids` field in `config.staging.json`. In local simulation, the actual secret values come from the `.env` file at the project root (mapped through `secrets.yaml`).
 
 ## 3. Confidential HTTP Calls
@@ -97,7 +106,12 @@ const bodyBytes = new TextEncoder().encode(JSON.stringify(body));
 const encodedBody = Buffer.from(bodyBytes).toString("base64");
 
 const response = client
-  .sendRequest(runtime, { url, method: "POST", body: encodedBody, headers })
+  .sendRequest(runtime, {
+    url,
+    method: "POST",
+    body: encodedBody,
+    headers,
+  })
   .result();
 ```
 
@@ -162,14 +176,20 @@ const validateScannerCredentials = (runtime, client, scannerUrl, scannerApiKey) 
 ```typescript
 // Primary: audits the token contract + transaction proposal
 const primaryAnalysis = requestAuditModel(
-  runtime, client, primary_llm_url, primaryLlmApiKey,
+  runtime,
+  client,
+  primary_llm_url,
+  primaryLlmApiKey,
   "audit-primary",
   buildPrimaryPrompt(proposal, tokenContract),
 );
 
 // Secondary: audits the protocol contract, given Primary's findings as prior context
 const secondaryAnalysis = requestAuditModel(
-  runtime, client, secondary_llm_url, secondaryLlmApiKey,
+  runtime,
+  client,
+  secondary_llm_url,
+  secondaryLlmApiKey,
   "audit-secondary",
   buildSecondaryPrompt(proposal, tokenContract, protocolContract, primaryAnalysis),
 );
@@ -310,7 +330,7 @@ function _processReport(bytes calldata report) internal override {
 
 ```typescript
 export const runAuditFirewall = async (runtime, client = new HTTPClient()) => {
-  // ① Fetch 3 secrets inside the enclave
+  // ① Fetch 3 secrets inside the enclave (1 batched getSecrets call)
   // ② GET /transaction-proposal          — get the proposed transaction
   // ③ GET /credentials/verify            — validate scanner credentials
   // ④ GET /contracts/{token} /{protocol} — fetch contract source & ABI

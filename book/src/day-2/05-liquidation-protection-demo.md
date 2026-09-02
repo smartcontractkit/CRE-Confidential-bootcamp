@@ -17,28 +17,31 @@ Create a `.env` at the project root:
 cp .env.example .env
 ```
 
-`.env.example` is pre-filled with demo defaults — note that it **contains all 9 policy parameters**:
+`.env.example` is pre-filled with demo defaults — note that it **contains the 8 policy-parameter secrets** (the sequencing preference is *not* here; it's set directly in `config.staging.json` as plain JSON config, not a Vault secret):
 
 ```bash
+### REQUIRED ENVIRONMENT VARIABLES - SENSITIVE INFORMATION                  ###
+### DO NOT STORE RAW SECRETS HERE IN PLAINTEXT IF AVOIDABLE                 ###
+### DO NOT UPLOAD OR SHARE THIS FILE UNDER ANY CIRCUMSTANCES                ###
+###############################################################################
+# Ethereum private key or 1Password reference (e.g. op://vault/item/field)
 CRE_ETH_PRIVATE_KEY=
 
 MOCK_PORT=8787
 MOCK_EXCHANGE_API_KEY=mock-exchange-key
 MOCK_OPENAI_API_KEY=mock-openai-key
 
-# —— Everything below is "policy-as-secrets" ——
-MOCK_LIQUIDATION_WARNING_ACTION_THRESHOLD=18          # Liquidation proximity warning line, %
-MOCK_LIQUIDATION_MINIMUM_HEALTH_FACTOR=1.25           # Minimum health factor
-MOCK_LIQUIDATION_TARGET_HEALTH_FACTOR=1.5             # Target health factor
-MOCK_LIQUIDATION_MAX_STABLECOIN_RESERVE_DEPLOYMENT=5000   # Max reserve deployment per execution, $
-MOCK_LIQUIDATION_MIN_STABLECOIN_RESERVE_BALANCE=2000      # Minimum reserve balance, $
-MOCK_LIQUIDATION_MAX_COLLATERAL_ALLOCATION=80             # Collateral allocation cap, %
-MOCK_LIQUIDATION_MAX_PARTIAL_DEBT_REPAYMENT=40            # Partial repayment cap, %
-MOCK_LIQUIDATION_DEFENSIVE_ACTION_SEQUENCING_PREFERENCE=collateral-first
+MOCK_LIQUIDATION_WARNING_ACTION_THRESHOLD=18
+MOCK_LIQUIDATION_MINIMUM_HEALTH_FACTOR=1.25
+MOCK_LIQUIDATION_TARGET_HEALTH_FACTOR=1.5
+MOCK_LIQUIDATION_MAX_STABLECOIN_RESERVE_DEPLOYMENT=5000
+MOCK_LIQUIDATION_MIN_STABLECOIN_RESERVE_BALANCE=2000
+MOCK_LIQUIDATION_MAX_COLLATERAL_ALLOCATION=80
+MOCK_LIQUIDATION_MAX_PARTIAL_DEBT_REPAYMENT=40
 MOCK_LIQUIDATION_PREFERRED_VENUES=binance,onchain,coinbase
 ```
 
-> **Food for thought**: why do these values live in `.env` / secrets rather than in `config.staging.json`? — Because they're your **private strategy**. In a real deployment they're managed by the Vault DON and only ever appear inside the enclave.
+> **Food for thought**: why do these values live in `.env` / secrets rather than in `config.staging.json`? — Because they're your **private strategy**. In a real deployment they're managed by the Vault DON and only ever appear inside the enclave. The one exception is the sequencing preference: it's not in `.env` at all — it's set directly in `config.staging.json` (`"defensive_action_sequencing_preference": "collateral-first"`), because it's plain workflow config, not a Vault secret.
 
 ## Step 3: Install Dependencies and Start the Mock Server
 
@@ -82,7 +85,7 @@ You'll see output similar to:
 ```bash
 [SIMULATION] Simulator Initialized
 
-[USER LOG] liquidation-getsecret-ok
+[USER LOG] liquidation-getsecrets-ok
 [USER LOG] liquidation-defense-executed action_count=2 execution_id=defense_...
 
 Workflow Simulation Result:
@@ -95,7 +98,7 @@ Workflow Simulation Result:
 
 | Log line | Meaning |
 |----------|---------|
-| `liquidation-getsecret-ok` | All 11 secrets (2 credentials + 9 policy parameters) fetched inside the enclave |
+| `liquidation-getsecrets-ok` | All 10 secrets (2 credentials + 8 policy-parameter secrets) fetched inside the enclave; the sequencing preference is read separately from public config |
 | `liquidation-defense-executed` | The defense plan was executed: 2 actions, with an execution ID |
 
 ### Why the Default Data Triggers DEFENDED
@@ -158,7 +161,7 @@ Mock Server (local port 8787)
    ▼
 CRE Simulator
    │  Compiles main.ts → WASM, executes along the (simulated) enclave path
-   │  11 secrets injected via the secrets.yaml mapping
+   │  10 secrets injected via the secrets.yaml mapping (sequencing preference comes from public workflow config, not secrets.yaml)
    │  LLM decision → enforcePolicy hard checks → execution
    ▼
 Result: SAFE (no action) or DEFENDED (defense executed)

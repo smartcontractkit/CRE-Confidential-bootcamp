@@ -76,7 +76,7 @@ You'll see output similar to:
 ```bash
 [SIMULATION] Simulator Initialized
 
-[USER LOG] audit-firewall-getsecret-ok
+[USER LOG] audit-firewall-getsecrets-ok
 [USER LOG] audit-firewall-scanner-credentials-ok provider=mock-scanner scopes=contracts:read,verification:read
 [USER LOG] audit-firewall-onchain-report-start
 [USER LOG] audit-firewall-onchain tx_hash=0x...
@@ -92,7 +92,7 @@ Workflow Simulation Result:
 
 | Log line | Meaning |
 |----------|---------|
-| `audit-firewall-getsecret-ok` | All 3 secrets were successfully fetched inside the (simulated) enclave |
+| `audit-firewall-getsecrets-ok` | All 3 secrets were successfully fetched inside the (simulated) enclave via a single batched `getSecrets` call |
 | `audit-firewall-scanner-credentials-ok` | Scanner credentials validated, with `contracts:read` and `verification:read` scopes |
 | `audit-firewall-onchain-report-start` | Started generating the DON-signed report (crossing back to the DON runtime) |
 | `audit-firewall-onchain tx_hash=...` | Simulated onchain write completed (no `--broadcast`, so nothing actually goes onchain) |
@@ -146,7 +146,7 @@ You have successfully:
 
 - ✅ Learned CRE's core concepts (Workflow / Trigger / Capability / DON)
 - ✅ Learned how Confidential Workflows work: TEEs, enclaves, the Vault DON, attestation
-- ✅ Mastered the 5 core patterns of confidential development: `handlerInTee`, in-enclave `getSecret`, confidential HTTP, capability restrictions, and `usingTheDons()`
+- ✅ Mastered the 5 core patterns of confidential development: `handlerInTee`, in-enclave batched `getSecrets`, confidential HTTP, capability restrictions, and `usingTheDons()`
 - ✅ Run your first Confidential Workflow
 
 Tomorrow we move on to the second case study — **Automated Liquidation Protection** — and see how confidential strategy parameters defend against front-running. See you then!
