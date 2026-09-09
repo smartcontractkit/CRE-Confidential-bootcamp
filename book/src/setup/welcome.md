@@ -4,9 +4,13 @@ Welcome to the **CRE Confidential Bootcamp: Build Confidential Workflows**!
 
 This is a two-day, hands-on bootcamp designed to give you a deep, developer-focused guide to building confidential computing workflows with the Chainlink Runtime Environment (CRE).
 
-Recording of Day 1 Video : https://www.youtube.com/watch?v=ArHoB1JDSlE 
+## Videos
 
-Recording of Day 2 Video : https://www.youtube.com/watch?v=ntwF13Z4_L8
+This Bootcamp was held live. Here are the recordings
+
+- [Day 1](https://www.youtube.com/watch?v=ArHoB1JDSlE)
+
+- [Day 2](https://www.youtube.com/watch?v=ntwF13Z4_L8)
 
 ## 🎤 Instructors
 
